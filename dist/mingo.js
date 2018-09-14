@@ -4140,21 +4140,11 @@ function traverse(obj, selector, fn) {
   if (names.length === 1) {
     fn(obj, key);
   } else {
-    // nested objects
-    if (isArray(obj) && !/^\d+$/.test(key)) {
-      each(obj, function (item) {
-        traverse(item, selector, fn, force);
-      });
-    } else {
-      // force the rest of the graph while traversing
-      if (force === true) {
-        var exists = has(obj, key);
-        if (!exists || isNil(obj[key])) {
-          obj[key] = {};
-        }
-      }
-      traverse(obj[key], next, fn, force);
+    // force the rest of the graph while traversing
+    if (force === true && isNil(obj[key])) {
+      obj[key] = {};
     }
+    traverse(obj[key], next, fn, force);
   }
 }
 
